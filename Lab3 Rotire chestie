@@ -1,0 +1,167 @@
+#include <iostream>
+#include <graphics.h>
+#include <cmath>
+#define N 3
+#define PI 3.1415
+
+void waitForLeftMouseClick();
+
+int main()
+{
+    initwindow(800,600); //open a 800 x 600 graphics window
+
+    int poligon[128];    // valori corespunzatoare dispozitivului de afisare
+    double points[128];  // valori reale (utilizate in tansform geometrice)
+
+    int R = 50;
+    double alfa = 2*PI/N;
+    for(int i=0;i<N+1;i++){
+        points[2*i]   = R*cos(i*alfa);
+        points[2*i+1] = R*sin(i*alfa);
+    }
+
+    for(int i=0;i<2*N+2;i++) poligon[i]=(int)points[i];
+
+    //setcolor(YELLOW);
+    //drawpoly(N+1,poligon);
+
+    // translatia poligonului
+    int tx = 250, ty = 170;
+    for(int i=0;i<N+1;i++){
+            points[2*i] = points[2*i] + tx;
+            points[2*i+1]= points[2*i+1] + ty;
+    }
+
+    // calculez coordonatele centrului de greutate
+    double xc=0, yc=0;
+    for(int i=0;i<N;i++){
+            xc += points[2*i];
+            yc += points[2*i+1];
+    }
+    xc/=N;yc/=N;
+    //circle((int)xc, (int)yc, 4);
+
+    for(int i=0;i<2*N+2;i++) poligon[i]=(int)points[i];
+//setcolor(WHITE);
+// drawpoly(N+1,poligon);
+
+
+    tx = 150;
+    ty = 150;
+
+    double Xc = xc+tx, Yc=yc+ty;
+   //line(xc,yc, Xc, Yc);
+    circle((int)Xc, (int)Yc, 10);
+    // translatie
+    for(int i=0;i<N+1;i++){
+            points[2*i] = points[2*i] + tx;
+            points[2*i+1]= points[2*i+1] + ty;
+    }
+
+
+    // scalare
+    double Sx=4, Sy=4;
+    for(int i=0;i<N+1;i++){
+            points[2*i]   = Xc + (-Xc+points[2*i])   * Sx;
+            points[2*i+1] = Yc + (-Yc+points[2*i+1]) * Sy;
+    }
+    //points[2*N] = points[0];
+    //points[2*N+1] = points[1];
+
+    for(int i=0;i<2*N+2;i++) poligon[i]=(int)points[i];
+    setcolor(YELLOW);
+    drawpoly(N+1,poligon);
+    cleardevice();
+
+
+
+    // rotatia fata de centrul (Xc,Yc)
+    double cosa = cos(3*PI/4), sina = sin(3*PI/4);
+    for(int i=0;i<N+1;i++){
+            double xi,yi;
+            xi = points[2*i];
+            yi = points[2*i+1];
+            points[2*i]   = Xc + (xi-Xc)*cosa - (yi-Yc)*sina;
+            points[2*i+1] = Yc + (xi-Xc)*sina + (yi-Yc)*cosa;
+    }
+
+    for(int i=0;i<2*N+2;i++) poligon[i]=(int)points[i];
+    setcolor(BLUE);
+    drawpoly(N+1,poligon);
+     cosa = cos(2*PI/3), sina = sin(2*PI/3);
+    for(int i=0;i<N+1;i++){
+            double xi,yi;
+            xi = points[2*i];
+            yi = points[2*i+1];
+            points[2*i]   = Xc + (xi-Xc)*cosa - (yi-Yc)*sina;
+            points[2*i+1] = Yc + (xi-Xc)*sina + (yi-Yc)*cosa;
+    }
+
+    for(int i=0;i<2*N+2;i++) poligon[i]=(int)points[i];
+    setcolor(BLUE);
+    drawpoly(N+1,poligon);
+ cosa = cos(PI/6), sina = sin(PI/6);
+    for(int i=0;i<N+1;i++){
+            double xi,yi;
+            xi = points[2*i];
+            yi = points[2*i+1];
+            points[2*i]   = Xc + (xi-Xc)*cosa - (yi-Yc)*sina;
+            points[2*i+1] = Yc + (xi-Xc)*sina + (yi-Yc)*cosa;
+    }
+
+    for(int i=0;i<2*N+2;i++) poligon[i]=(int)points[i];
+    setcolor(BLUE);
+    drawpoly(N+1,poligon);
+    cosa = cos(PI/4), sina = sin(PI/4);
+    for(int i=0;i<N+1;i++){
+            double xi,yi;
+            xi = points[2*i];
+            yi = points[2*i+1];
+            points[2*i]   = Xc + (xi-Xc)*cosa - (yi-Yc)*sina;
+            points[2*i+1] = Yc + (xi-Xc)*sina + (yi-Yc)*cosa;
+    }
+
+    for(int i=0;i<2*N+2;i++) poligon[i]=(int)points[i];
+    setcolor(YELLOW);
+    drawpoly(N+1,poligon);
+
+
+
+      cosa = cos(PI), sina = sin(PI);
+    for(int i=0;i<N+1;i++){
+            double xi,yi;
+            xi = points[2*i];
+            yi = points[2*i+1];
+            points[2*i]   = Xc + (xi-Xc)*cosa - (yi-Yc)*sina;
+            points[2*i+1] = Yc + (xi-Xc)*sina + (yi-Yc)*cosa;
+    }
+
+    for(int i=0;i<2*N+2;i++) poligon[i]=(int)points[i];
+    setcolor(RED);
+    drawpoly(N+1,poligon);
+
+
+
+
+
+    // while(!kbhit());     // wait for user to press a key
+    waitForLeftMouseClick(); // use one or the other of these--not both
+
+
+    closegraph();        //close graphics window
+	return 0;
+}
+
+
+
+
+
+void waitForLeftMouseClick()
+{
+    clearmouseclick(WM_LBUTTONDOWN);
+    const int DELAY = 50; // Milliseconds of delay between checks
+    int x, y;
+    while (!ismouseclick(WM_LBUTTONDOWN))
+        delay(DELAY);
+    getmouseclick(WM_LBUTTONDOWN, x, y);
+}
